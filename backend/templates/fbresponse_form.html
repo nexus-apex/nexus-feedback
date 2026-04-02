@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}{% if editing %}Edit{% else %}New{% endif %} FBResponse | NexusFeedback{% endblock %}
+{% block page_title %}{% if editing %}Edit FBResponse{% else %}New FBResponse{% endif %}{% endblock %}
+{% block content %}
+<div class="card" style="max-width:750px">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-row">
+      <div class="form-group">
+        <label>Feedback Title</label>
+        <input type="text" name="feedback_title" value="{{ record.feedback_title|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Responder</label>
+        <input type="text" name="responder" value="{{ record.responder|default:'' }}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Response</label>
+      <textarea name="response">{{ record.response|default:'' }}</textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Date</label>
+        <input type="date" name="date" value="{{ record.date|date:'Y-m-d'|default:'' }}">
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Internal Note</label>
+      <textarea name="internal_note">{{ record.internal_note|default:'' }}</textarea>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Status</label>
+        <select name="status">
+          <option value="draft" {% if record.status == 'draft' %}selected{% endif %}>Draft</option>
+          <option value="sent" {% if record.status == 'sent' %}selected{% endif %}>Sent</option>
+        </select>
+      </div>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;margin-top:1rem">
+      <button type="submit" class="btn btn-primary">{% if editing %}Update{% else %}Create{% endif %} FBResponse</button>
+      <a href="/fbresponses/" class="btn" style="background:var(--border);color:var(--text)">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
