@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+{% block title %}Feedbackitems | NexusFeedback{% endblock %}
+{% block page_title %}Feedbackitems{% endblock %}
+{% block content %}
+<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1.5rem;flex-wrap:wrap;gap:1rem">
+  <form class="search-bar" method="get" style="flex:1;margin-bottom:0">
+    <input type="text" name="search" value="{{ search }}" placeholder="Search feedbackitems...">
+    <select name="status" onchange="this.form.submit()">
+      <option value="">All Category</option>
+      <option value="bug" {% if status_filter == 'bug' %}selected{% endif %}>Bug</option>
+      <option value="feature" {% if status_filter == 'feature' %}selected{% endif %}>Feature</option>
+      <option value="complaint" {% if status_filter == 'complaint' %}selected{% endif %}>Complaint</option>
+      <option value="praise" {% if status_filter == 'praise' %}selected{% endif %}>Praise</option>
+      <option value="suggestion" {% if status_filter == 'suggestion' %}selected{% endif %}>Suggestion</option>
+    </select>
+    <button type="submit" class="btn btn-primary btn-sm">Search</button>
+  </form>
+  <a href="/feedbackitems/create/" class="btn btn-primary">+ New FeedbackItem</a>
+</div>
+
+<div class="card">
+  {% if records %}
+  <table>
+    <thead>
+      <tr><th>Title</th><th>Customer Name</th><th>Customer Email</th><th>Category</th><th>Rating</th><th>Actions</th></tr>
+    </thead>
+    <tbody>
+      {% for r in records %}
+      <tr>
+        <td><a href="/feedbackitems/{{ r.pk }}/edit/"><strong>{{ r.title }}</strong></a></td>
+        <td>{{ r.customer_name|default:"-" }}</td>
+        <td style="color:var(--muted)">{{ r.customer_email|default:"-" }}</td>
+        <td><span class="badge badge-blue">{{ r.get_category_display }}</span></td>
+        <td>{{ r.rating|default:"-" }}</td>
+        <td class="actions">
+          <a href="/feedbackitems/{{ r.pk }}/edit/" class="btn btn-primary btn-sm">Edit</a>
+          <form method="post" action="/feedbackitems/{{ r.pk }}/delete/" style="display:inline" onsubmit="return confirm('Delete?')">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger btn-sm">Del</button>
+          </form>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  {% else %}
+  <div class="empty">
+    <p>No feedbackitems found.</p>
+    <a href="/feedbackitems/create/" class="btn btn-primary" style="margin-top:1rem">Create FeedbackItem</a>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
