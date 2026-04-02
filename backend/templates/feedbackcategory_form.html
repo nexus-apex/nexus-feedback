@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}{% if editing %}Edit{% else %}New{% endif %} FeedbackCategory | NexusFeedback{% endblock %}
+{% block page_title %}{% if editing %}Edit FeedbackCategory{% else %}New FeedbackCategory{% endif %}{% endblock %}
+{% block content %}
+<div class="card" style="max-width:750px">
+  <form method="post">
+    {% csrf_token %}
+    <div class="form-row">
+      <div class="form-group">
+        <label>Name</label>
+        <input type="text" name="name" value="{{ record.name|default:'' }}">
+      </div>
+      <div class="form-group">
+        <label>Items Count</label>
+        <input type="number" name="items_count" value="{{ record.items_count|default:'0' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Avg Rating</label>
+        <input type="number" step="0.01" name="avg_rating" value="{{ record.avg_rating|default:'0' }}">
+      </div>
+      <div class="form-group">
+        <label>Response Time Hrs</label>
+        <input type="number" step="0.01" name="response_time_hrs" value="{{ record.response_time_hrs|default:'0' }}">
+      </div>
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label>Owner</label>
+        <input type="text" name="owner" value="{{ record.owner|default:'' }}">
+      </div>
+    </div>
+    <div class="form-group">
+      <div class="checkbox-wrapper">
+        <input type="checkbox" name="active" id="id_active" {% if record.active %}checked{% endif %}>
+        <label for="id_active" style="margin-bottom:0">Active</label>
+      </div>
+    </div>
+    <div class="form-group">
+      <label>Description</label>
+      <textarea name="description">{{ record.description|default:'' }}</textarea>
+    </div>
+
+    <div style="display:flex;gap:0.75rem;margin-top:1rem">
+      <button type="submit" class="btn btn-primary">{% if editing %}Update{% else %}Create{% endif %} FeedbackCategory</button>
+      <a href="/feedbackcategories/" class="btn" style="background:var(--border);color:var(--text)">Cancel</a>
+    </div>
+  </form>
+</div>
+{% endblock %}
